@@ -133,7 +133,9 @@ class _PromptPageState extends State<PromptPage> {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Enter a number';
-          } else if (int.parse(value) > 50 || int.parse(value) < 1) {
+          } else if (int.tryParse(value) == null ||
+              int.parse(value) > 50 ||
+              int.parse(value) < 1) {
             return 'Enter a number between 1 and 50';
           }
           return null;
