@@ -1,3 +1,9 @@
+// Author: Daniel McErlean
+// Title: Prompt Page
+// About: Prompts users for username, number of questions, category and difficulty of questions.
+//        Information is then sent through with the API call, in which data recieved is then stored in data_provider,
+//        username is sent directly to the game_page where it will be registered when the game is over in data_provider
+
 import 'dart:convert';
 
 import 'package:daniel_mcerlean_project_2/providers/data_provider.dart';
@@ -61,7 +67,6 @@ class _PromptPageState extends State<PromptPage> {
                   ),
                   child: IntrinsicHeight(
                     child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         usernameInput(),
                         numQuestions(),

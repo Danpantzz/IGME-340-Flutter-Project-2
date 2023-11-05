@@ -1,3 +1,8 @@
+// Author: Daniel McErlean
+// Title: Game Page
+// About: Main game page for prompting the user with trivia questions, answers, and submitting their selection.
+//        
+
 import 'package:html/parser.dart';
 import 'package:daniel_mcerlean_project_2/providers/data_provider.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +11,11 @@ import 'package:provider/provider.dart';
 bool gameOver = false;
 bool submitted = false;
 bool disabled = false;
-var submitColor = const Color.fromARGB(255, 188, 138, 248);
-//var questions = [];
-var index = 0;
-var score = 0;
 String result = '';
 List<Text> options = <Text>[];
+var submitColor = const Color.fromARGB(255, 188, 138, 248);
+var index = 0;
+var score = 0;
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -33,6 +37,9 @@ class _GamePageState extends State<GamePage> {
 
     // Gets questions data from data_provider
     var questions = context.read<DataProvider>().questions;
+
+    // key for scrolling back to top
+    var scrollKey = GlobalKey();
 
     return WillPopScope(
       // When user hits back button, this is called to prevent variables from persisting
@@ -65,7 +72,7 @@ class _GamePageState extends State<GamePage> {
                 title: Text(
                   "${questions[index]['category']}",
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width / 19,
+                    fontSize: MediaQuery.of(context).size.width / 13,
                   ),
                 ),
               ),
@@ -92,6 +99,7 @@ class _GamePageState extends State<GamePage> {
                         : Column(
                             children: [
                               Padding(
+                                key: scrollKey,
                                 padding: const EdgeInsets.only(top: 12.0),
                                 child: Text(
                                   "Question ${index + 1} of ${questions.length}",
@@ -102,6 +110,7 @@ class _GamePageState extends State<GamePage> {
                               displayQuestion(questions),
                               displayAnswers(questions),
                               submitted
+                                  // Show the answer only if the user pressed 'submit'
                                   ? Padding(
                                       padding: const EdgeInsets.only(top: 12.0),
                                       child: Text(
@@ -114,6 +123,7 @@ class _GamePageState extends State<GamePage> {
                                     )
                                   : const Text(''),
                               submitted
+                                  // Show the answer only if the user pressed 'submit'
                                   ? Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 35.0),
@@ -129,7 +139,9 @@ class _GamePageState extends State<GamePage> {
                                     )
                                   : const Text(''),
                               submitted
-                                  ? nextQuestion(context, questions, arguments)
+                                  // Show next question button if user pressed 'submit', otherwise show submit button
+                                  ? nextQuestion(
+                                      context, questions, arguments, scrollKey)
                                   : submitAnswer(context, questions),
                             ],
                           ),
@@ -154,7 +166,7 @@ class _GamePageState extends State<GamePage> {
     _selectedOptionsBool = <bool>[false, false];
   }
 
-  // appbar color changes
+  // appbar color changes depending on difficulty of question
   Color? changeColor(questions) {
     if (questions[index]['difficulty'] == 'easy') {
       return Colors.green;
@@ -269,15 +281,13 @@ class _GamePageState extends State<GamePage> {
               }
             },
             style: ElevatedButton.styleFrom(
-                shadowColor: Colors.black,
-                elevation: 10,
-                minimumSize: Size(
-                  MediaQuery.of(context).size.width / 2,
-                  MediaQuery.of(context).size.height / 13,
-                ),
-                textStyle: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width / 15,
-                )),
+              shadowColor: Colors.black,
+              elevation: 10,
+              minimumSize: Size(
+                MediaQuery.of(context).size.width / 2,
+                MediaQuery.of(context).size.height / 13,
+              ),
+            ),
             child: const Text("Submit"),
           ),
         ),
@@ -286,7 +296,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   // displays some info before next question
-  Widget nextQuestion(BuildContext context, questions, arguments) {
+  Widget nextQuestion(BuildContext context, questions, arguments, scrollKey) {
     var dataProvider = context.watch<DataProvider>();
 
     return Expanded(
@@ -304,6 +314,8 @@ class _GamePageState extends State<GamePage> {
                 setState(() {
                   index++;
                 });
+
+                Scrollable.ensureVisible(scrollKey.currentContext!);
               }
               // No questions are left, end the game and display the gameOverView by setting gameOver to true
               else {
@@ -318,15 +330,13 @@ class _GamePageState extends State<GamePage> {
               }
             },
             style: ElevatedButton.styleFrom(
-                shadowColor: Colors.black,
-                elevation: 10,
-                minimumSize: Size(
-                  MediaQuery.of(context).size.width / 2,
-                  MediaQuery.of(context).size.height / 13,
-                ),
-                textStyle: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width / 15,
-                )),
+              shadowColor: Colors.black,
+              elevation: 10,
+              minimumSize: Size(
+                MediaQuery.of(context).size.width / 2,
+                MediaQuery.of(context).size.height / 13,
+              ),
+            ),
             child: const Text("Next"),
           ),
         ),
@@ -355,9 +365,7 @@ class _GamePageState extends State<GamePage> {
             color: Colors.white,
           ),
           child: ToggleButtons(
-            textStyle: TextStyle(
-              fontSize: MediaQuery.of(context).size.width / 20,
-            ),
+            textStyle: Theme.of(context).textTheme.titleMedium,
             direction: Axis.vertical,
             onPressed: (int index) {
               setState(() {
@@ -385,7 +393,8 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-// showAnswer() used for slight differences in checking against answers
+  // showAnswer() used for slight differences in checking against answers
+  // called from submitAnswer()
   showAnswer(optionsType, questions) {
     // Submission was Correct
     if (parseFragment(questions[index]['correct_answer']).text! ==

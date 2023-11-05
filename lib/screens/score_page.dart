@@ -1,3 +1,9 @@
+// Author: Daniel McErlean
+// Title: Score Page
+// About: Displays each users score (how many questions they got correct overall).
+//        Score will update as users get more questions correct under the same username.
+//        Scores are reset when the user exits the app.
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/data_provider.dart';
@@ -22,6 +28,7 @@ class _ScorePageState extends State<ScorePage> {
       body: SafeArea(
         child: Center(
           child: users.isEmpty
+          // if no users yet, then don't attempt to display any
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -31,15 +38,13 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                   ],
                 )
+          // is users list is not empty, display users and their scores
               : GridView.builder(
-                  //shrinkWrap: true,
                   physics: const ScrollPhysics(),
                   itemCount: users.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
-                    //crossAxisSpacing: 1,
                     mainAxisSpacing: 10,
-                    //mainAxisExtent: 30,
                     childAspectRatio: 3,
                   ),
                   itemBuilder: ((context, index) {
@@ -70,5 +75,3 @@ class _ScorePageState extends State<ScorePage> {
     );
   }
 }
-
-// display scores

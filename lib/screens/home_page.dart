@@ -1,3 +1,9 @@
+// Author: Daniel McErlean
+// Title: Home Page
+// About: First page seen by user, contains the title, and buttons leading to
+//        the prompt page, highscore page, credits page, as well as a quit button
+//        for exiting the app.
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -19,9 +25,6 @@ class _HomePageState extends State<HomePage> {
         return quitButtonPressed(context);
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: Text("Home"),
-        // ),
         body: DecoratedBox(
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -41,14 +44,10 @@ class _HomePageState extends State<HomePage> {
                       repeatForever: true,
                       animatedTexts: [
                         WavyAnimatedText(
-                          "Trivia Time!",
+                          "Trivia Mania!",
                           textStyle: Theme.of(context).textTheme.titleLarge!,
                           speed: const Duration(milliseconds: 200),
                           textAlign: TextAlign.center,
-                          // colors: [
-                          //   Colors.black,
-                          //   Color(0xFF2F0068),
-                          // ],
                         ),
                       ],
                     ),
@@ -57,6 +56,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 20,
                   ),
+
                   // Start Game Button
                   ElevatedButton(
                     onPressed: () {
@@ -73,16 +73,25 @@ class _HomePageState extends State<HomePage> {
                     child: const Text("Highscores"),
                   ),
 
-                  // Quit Game Button
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        quitButtonPressed(context);
-                      },
-                      child: const Text("Quit Game"),
-                    ),
+                  // Credits Page Button
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/credits");
+                    },
+                    child: const Text("Credits"),
                   ),
+
+                  // Quit Game Button
+                  ElevatedButton(
+                    onPressed: () {
+                      quitButtonPressed(context);
+                    },
+                    child: const Text("Quit Game"),
+                  ),
+
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 50,
+                  )
                 ],
               ),
             ),
@@ -92,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+// called when either the Quit Game button is pressed, or back button is pressed
   quitButtonPressed(BuildContext context) {
     return showDialog(
       context: context,

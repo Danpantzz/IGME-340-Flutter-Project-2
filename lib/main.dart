@@ -1,11 +1,17 @@
-import 'package:daniel_mcerlean_project_2/providers/data_provider.dart';
+// Author: Daniel McErlean
+// Title: Main
+// About: Main file for setting up all pages, routing, and themeData
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import 'providers/data_provider.dart';
 import 'screens/home_page.dart';
 import 'screens/prompt_page.dart';
 import 'screens/game_page.dart';
 import 'screens/score_page.dart';
+import 'screens/credits_page.dart';
 
 void main() {
   runApp(
@@ -49,32 +55,43 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 93, 0, 206),
         ),
         textTheme: TextTheme(
-          titleLarge: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 10,
+          titleLarge: GoogleFonts.vt323(
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width / 7,
+              color: const Color.fromARGB(255, 214, 180, 255),
+            ),
+          ),
+          titleMedium: GoogleFonts.vt323(
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width / 12,
+            ),
+          ),
+          titleSmall: GoogleFonts.vt323(
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width / 14,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          displayLarge: GoogleFonts.vt323(
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width / 12,
+              color: const Color.fromARGB(255, 93, 0, 206),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          displayMedium: GoogleFonts.vt323(
+              textStyle: TextStyle(
+            fontSize: MediaQuery.of(context).size.width / 13,
             color: const Color.fromARGB(255, 214, 180, 255),
-          ),
-          titleMedium: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 16,
-          ),
-          titleSmall: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 20,
-            fontWeight: FontWeight.normal,
-          ),
-          displayLarge: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 16,
-            color: const Color.fromARGB(255, 93, 0, 206),
             fontWeight: FontWeight.bold,
-          ),
-          displayMedium: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 16,
-            color: const Color.fromARGB(255, 214, 180, 255),
-            fontWeight: FontWeight.bold,
-          ),
+          )),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             padding: const MaterialStatePropertyAll(EdgeInsets.all(8.0)),
-            backgroundColor: const MaterialStatePropertyAll(Color.fromARGB(255, 93, 0, 206)),
+            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+            backgroundColor:
+                const MaterialStatePropertyAll(Color.fromARGB(255, 93, 0, 206)),
             shadowColor: const MaterialStatePropertyAll(Colors.black),
             elevation: const MaterialStatePropertyAll(10),
             minimumSize: MaterialStatePropertyAll(
@@ -84,9 +101,10 @@ class MainApp extends StatelessWidget {
               ),
             ),
             textStyle: MaterialStatePropertyAll(
-              TextStyle(
-                fontSize: MediaQuery.of(context).size.width / 15,
-              ),
+              GoogleFonts.vt323(
+                  textStyle: TextStyle(
+                fontSize: MediaQuery.of(context).size.width / 10,
+              )),
             ),
           ),
         ),
@@ -105,6 +123,9 @@ class MainApp extends StatelessWidget {
 
         // Score Page will show top 10 highscores
         "/score": (context) => const ScorePage(),
+
+        // Credits Page for documentation
+        "/credits": (context) => const CreditsPage(),
       },
     );
   }
