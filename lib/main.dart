@@ -80,11 +80,12 @@ class MainApp extends StatelessWidget {
             ),
           ),
           displayMedium: GoogleFonts.vt323(
-              textStyle: TextStyle(
-            fontSize: MediaQuery.of(context).size.width / 13,
-            color: const Color.fromARGB(255, 214, 180, 255),
-            fontWeight: FontWeight.bold,
-          )),
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width / 13,
+              color: const Color.fromARGB(255, 214, 180, 255),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
@@ -100,11 +101,18 @@ class MainApp extends StatelessWidget {
                 MediaQuery.of(context).size.height / 13,
               ),
             ),
+            side: const MaterialStatePropertyAll(
+              BorderSide(
+                width: 2,
+                color: Colors.grey,
+              ),
+            ),
             textStyle: MaterialStatePropertyAll(
               GoogleFonts.vt323(
-                  textStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.width / 10,
-              )),
+                textStyle: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width / 10,
+                ),
+              ),
             ),
           ),
         ),

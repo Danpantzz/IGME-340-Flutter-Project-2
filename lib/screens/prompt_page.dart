@@ -37,6 +37,8 @@ class _PromptPageState extends State<PromptPage> {
 
   final _usernameController = TextEditingController();
   final _questionsController = TextEditingController();
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _questionsFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -68,7 +70,7 @@ class _PromptPageState extends State<PromptPage> {
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                        usernameInput(),
+                        usernameInput(context),
                         numQuestions(),
                         categoryDropdown(),
                         difficultyDropdown(),
@@ -87,17 +89,20 @@ class _PromptPageState extends State<PromptPage> {
   }
 
 // Form for entering username
-  Widget usernameInput() {
+  Widget usernameInput(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
         controller: _usernameController,
+        focusNode: _usernameFocusNode,
+        textInputAction: TextInputAction.next,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Enter a username';
           }
           return null;
         },
+        onEditingComplete: () => FocusScope.of(context).requestFocus(_questionsFocusNode),
         style: Theme.of(context).textTheme.titleSmall,
         decoration: InputDecoration(
           label: const Text("Username"),
@@ -133,6 +138,8 @@ class _PromptPageState extends State<PromptPage> {
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
         controller: _questionsController,
+        focusNode: _questionsFocusNode,
+        textInputAction: TextInputAction.done,
         keyboardType: TextInputType.number,
         maxLength: 2,
         validator: (value) {

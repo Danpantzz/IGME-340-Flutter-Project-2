@@ -14,7 +14,8 @@
     <div>
         <h1>About</h1>
         <h3>Created by: Daniel McErlean</h3>
-        <p>This trivia app utilizes the free Trivia Database to give users a specified amount of questions in a variety
+        <p>This trivia app utilizes the free Trivia Database API to give users a specified amount of questions in a
+            variety
             of categories and difficulties. Built with Flutter for a school project.</p>
     </div>
     <!-- #endregion -->
@@ -74,6 +75,7 @@
                             </li>
                         </ul>
                     </li>
+                    <li>Pressing the 'next' button will bring the app back to the top of the screen if the next question is large enough for the app to scroll</li>
                     <li>If the user presses the back button, a prompt to exit appears warning that progress will be lost
                         when leaving in the middle of a game.</li>
                     <li>After each question is answered, the app will:
@@ -101,6 +103,29 @@
     </div>
     <!-- #endregion -->
 
+    <!-- #region Process -->
+    <div>
+        <h1>Process</h1>
+        <ol>
+            <li>Started out with an idea for a trivia game</li>
+            <li>Created the pages and routing</li>
+            <li>Set up the prompt page to receive api response</li>
+            <li>Set up game page to display api response</li>
+            <li>Set up data_provider to provide the users and api response to the different pages</li>
+            <li>Styled app with dynamic sizes for different screens, and changed colors and font</li>
+        </ol>
+
+        <h2>Set Backs / Glitches</h2>
+        <ul>
+            <li>Could not get shared_preferences to work properly, so users and scores are not saved between sessions.
+            </li>
+            <li>Some answer responses are too long and are aligned to the left side of the selection box. There seems to
+                be no way to always center text inside of toggleButtons</li>
+            
+        </ul>
+    </div>
+    <!-- #endregion -->
+
     <hr>
 
     <!-- #region Sources-->
@@ -120,7 +145,11 @@
             <li><a
                     href="https://stackoverflow.com/questions/57878887/using-flutter-webview-as-home-and-pressing-back-button-closes-application">Structure
                     for pressing back button in WebView</a></li>
-            <li><a href="https://stackoverflow.com/questions/51119795/how-to-remove-scroll-glow">Stops glow effect on scrollable pages</a></li>
+            <li><a href="https://stackoverflow.com/questions/51119795/how-to-remove-scroll-glow">Stops glow effect on
+                    scrollable pages</a></li>
+            <li><a
+                    href="https://stackoverflow.com/questions/59477239/textinputaction-textinputaction-next-failing-to-move-user-focus-to-next-element">Fix
+                    for automatically going to next field in Prompt Page</a></li>
             <li><a href="https://stackoverflow.com/">Various troubleshooting fixes found on stackoverflow</a></li>
         </ul>
 

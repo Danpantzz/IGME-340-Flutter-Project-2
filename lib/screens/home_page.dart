@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.pushNamed(context, "/credits");
                     },
-                    child: const Text("Credits"),
+                    child: const Text("About"),
                   ),
 
                   // Quit Game Button

@@ -272,12 +272,12 @@ class _GamePageState extends State<GamePage> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: ElevatedButton(
-            onPressed: () async {
+            onPressed: () {
               // send different data to showAnswer() depending on question type
               if (questions[index]['type'] == 'multiple') {
-                await showAnswer(_selectedOptions, questions);
+                showAnswer(_selectedOptions, questions);
               } else {
-                await showAnswer(_selectedOptionsBool, questions);
+                showAnswer(_selectedOptionsBool, questions);
               }
             },
             style: ElevatedButton.styleFrom(
@@ -396,8 +396,13 @@ class _GamePageState extends State<GamePage> {
   // showAnswer() used for slight differences in checking against answers
   // called from submitAnswer()
   showAnswer(optionsType, questions) {
+    // if nothing is selected, return
+    if (optionsType.indexOf(true) == -1) {
+      return;
+    }
+
     // Submission was Correct
-    if (parseFragment(questions[index]['correct_answer']).text! ==
+    else if (parseFragment(questions[index]['correct_answer']).text! ==
         options[optionsType.indexOf(true)].data) {
       // change selected color (submitColor),
       // disable changing the selected options (disabled),
