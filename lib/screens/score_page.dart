@@ -4,9 +4,10 @@
 //        Score will update as users get more questions correct under the same username.
 //        Scores are reset when the user exits the app.
 
+import '../providers/data_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/data_provider.dart';
 
 class ScorePage extends StatefulWidget {
   const ScorePage({super.key});

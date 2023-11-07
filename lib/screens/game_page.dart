@@ -1,10 +1,11 @@
 // Author: Daniel McErlean
 // Title: Game Page
 // About: Main game page for prompting the user with trivia questions, answers, and submitting their selection.
-//        
+//       
+ 
+import '../providers/data_provider.dart';
 
 import 'package:html/parser.dart';
-import 'package:daniel_mcerlean_project_2/providers/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -403,7 +404,7 @@ class _GamePageState extends State<GamePage> {
 
     // Submission was Correct
     else if (parseFragment(questions[index]['correct_answer']).text! ==
-        options[optionsType.indexOf(true)].data) {
+        options[optionsType.indexOf(true)].data && !submitted) {
       // change selected color (submitColor),
       // disable changing the selected options (disabled),
       // changes this button to the nextQuestion button (submitted)
@@ -416,7 +417,7 @@ class _GamePageState extends State<GamePage> {
       });
     }
     // Submission was Wrong
-    else {
+    else if (!submitted) {
       setState(() {
         submitColor = const Color(0xFFF94449);
         disabled = true;

@@ -6,10 +6,14 @@
 
 import 'dart:convert';
 
-import 'package:daniel_mcerlean_project_2/providers/data_provider.dart';
+import '../providers/data_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+bool finishedLoading = false;
 
 List<String> categoryList = ["Any Category"];
 List<String> categoryIdList = ["0"];
@@ -40,6 +44,40 @@ class _PromptPageState extends State<PromptPage> {
   final FocusNode _usernameFocusNode = FocusNode();
   final FocusNode _questionsFocusNode = FocusNode();
 
+  // Shared Preferences
+  late SharedPreferences prefs;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      String? username = prefs.getString("username");
+      String? questions = prefs.getString("questions");
+      String? category = prefs.getString("category");
+      String? diffculty = prefs.getString("difficulty");
+
+      if (username != null) {
+        _usernameController.text = username;
+      }
+      if (questions != null) {
+        _questionsController.text = questions;
+      }
+      if (category != null) {
+        categorySelected = category;
+      }
+      if (diffculty != null) {
+        difficultySelected = diffculty;
+      }
+    });
+  }
+
+  // save form data to shared_preferences
+  Future saveData() async {
+    await prefs.setString("username", _usernameController.text);
+    await prefs.setString("questions", _questionsController.text);
+    await prefs.setString("category", categorySelected!);
+    await prefs.setString("difficulty", difficultySelected!);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +86,7 @@ class _PromptPageState extends State<PromptPage> {
     if (categoryList.length < 2) {
       createCategoryList();
     }
+    initPrefs();
   }
 
   @override
@@ -72,7 +111,11 @@ class _PromptPageState extends State<PromptPage> {
                       children: [
                         usernameInput(context),
                         numQuestions(),
-                        categoryDropdown(),
+                        finishedLoading
+                            ? categoryDropdown()
+                            : const CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
                         difficultyDropdown(),
                         Expanded(child: Container()),
                         startButton(context),
@@ -102,7 +145,10 @@ class _PromptPageState extends State<PromptPage> {
           }
           return null;
         },
-        onEditingComplete: () => FocusScope.of(context).requestFocus(_questionsFocusNode),
+        onEditingComplete: () {
+          saveData();
+          FocusScope.of(context).requestFocus(_questionsFocusNode);
+        },
         style: Theme.of(context).textTheme.titleSmall,
         decoration: InputDecoration(
           label: const Text("Username"),
@@ -121,7 +167,8 @@ class _PromptPageState extends State<PromptPage> {
           ),
           contentPadding: const EdgeInsets.all(8),
           suffixIcon: IconButton(
-            onPressed: () {
+            onPressed: () async {
+              await prefs.remove('username');
               _usernameController.clear();
             },
             icon: const Icon(Icons.clear),
@@ -152,6 +199,10 @@ class _PromptPageState extends State<PromptPage> {
           }
           return null;
         },
+        onEditingComplete: () {
+          saveData();
+          _questionsFocusNode.unfocus();
+        },
         style: Theme.of(context).textTheme.titleSmall,
         decoration: InputDecoration(
           label: const Text("# of Questions (Max 50)"),
@@ -171,7 +222,8 @@ class _PromptPageState extends State<PromptPage> {
           ),
           contentPadding: const EdgeInsets.all(8),
           suffixIcon: IconButton(
-            onPressed: () {
+            onPressed: () async {
+              await prefs.remove('questions');
               _questionsController.clear();
             },
             icon: const Icon(Icons.clear),
@@ -198,6 +250,7 @@ class _PromptPageState extends State<PromptPage> {
           setState(
             () {
               categorySelected = value;
+              saveData();
             },
           );
         },
@@ -240,6 +293,7 @@ class _PromptPageState extends State<PromptPage> {
           setState(
             () {
               difficultySelected = value;
+              saveData();
             },
           );
         },
@@ -280,6 +334,14 @@ class _PromptPageState extends State<PromptPage> {
             var numQuestions = _questionsController.text;
 
             // url doesnt take strings, so map it to the specific id
+            if (!categoryList.contains(categorySelected!)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Check your internet and select a category!'),
+                ),
+              );
+              return;
+            }
             var categoryId =
                 categoryIdList[categoryList.indexOf(categorySelected!)];
 
@@ -301,6 +363,10 @@ class _PromptPageState extends State<PromptPage> {
             // fixes 'dont use build context across async code'
             if (!context.mounted) return;
 
+            if (data == null) {
+              return;
+            }
+
             // return if API fetch came back with no results (will happen if there's not enough questions)
             if (data['response_code'] == 1) {
               // tell user how many questions are available
@@ -313,6 +379,7 @@ class _PromptPageState extends State<PromptPage> {
               if (!context.mounted) return;
 
               // show different message depending on difficulty selected
+              // if not enough questions in request
               switch (difficulty) {
                 case '0':
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -351,6 +418,9 @@ class _PromptPageState extends State<PromptPage> {
               return;
             }
 
+            // save preferences
+            saveData();
+
             ///// send returned json to game_page/data_provider /////
             dataProvider.changetriviaResponse(data);
 
@@ -375,24 +445,42 @@ class _PromptPageState extends State<PromptPage> {
 
 // Sets up Dropdown list for categories
   Future createCategoryList() async {
-    var json = await search("https://opentdb.com/api_category.php");
+    try {
+      var json = await search("https://opentdb.com/api_category.php");
 
-    json["trivia_categories"].forEach((item) {
-      setState(() {
-        categoryList.add(item["name"]);
-        categoryIdList.add(item["id"].toString());
+      json["trivia_categories"].forEach((item) {
+        setState(() {
+          categoryList.add(item["name"]);
+          categoryIdList.add(item["id"].toString());
+        });
       });
-    });
+
+      setState(() {
+        finishedLoading = true;
+      });
+    } catch (e) {
+      return;
+    }
   }
-}
 
 // Searches API urls and returns json
-Future search(String url) async {
-  var response = await http.get(Uri.parse(url));
+  Future search(String url) async {
+    try {
+      var response = await http.get(Uri.parse(url));
 
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to load data, ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load data, ${response.statusCode}');
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Check you internet connection!'),
+        ),
+      );
+    }
   }
 }
