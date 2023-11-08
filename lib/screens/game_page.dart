@@ -76,6 +76,7 @@ class _GamePageState extends State<GamePage> {
                     fontSize: MediaQuery.of(context).size.width / 13,
                   ),
                 ),
+                toolbarHeight: MediaQuery.of(context).size.width > 400 ? MediaQuery.of(context).size.width / 8 : kToolbarHeight,
               ),
         body: DecoratedBox(
           decoration: BoxDecoration(
@@ -286,7 +287,7 @@ class _GamePageState extends State<GamePage> {
               elevation: 10,
               minimumSize: Size(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height / 13,
+                MediaQuery.of(context).size.height / 10,
               ),
             ),
             child: const Text("Submit"),
@@ -335,7 +336,7 @@ class _GamePageState extends State<GamePage> {
               elevation: 10,
               minimumSize: Size(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height / 13,
+                MediaQuery.of(context).size.height / 10,
               ),
             ),
             child: const Text("Next"),
@@ -382,7 +383,7 @@ class _GamePageState extends State<GamePage> {
             selectedBorderColor: Colors.black,
             fillColor: submitColor,
             constraints: BoxConstraints(
-              minHeight: height,
+              minHeight: MediaQuery.of(context).size.height < 1000 ? height : height * 1.85,
               minWidth: MediaQuery.of(context).size.width / 1.3,
               maxWidth: MediaQuery.of(context).size.width / 1.3,
             ),

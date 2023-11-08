@@ -1,3 +1,7 @@
+// Author: Daniel McErlean
+// Title: data_provider
+// About: Contains questions response, and users list with usernames and scores
+
 import 'package:flutter/material.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 

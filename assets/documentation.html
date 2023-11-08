@@ -75,7 +75,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li>Pressing the 'next' button will bring the app back to the top of the screen if the next question is large enough for the app to scroll</li>
+                    <li>Pressing the 'next' button will bring the app back to the top of the screen if the next question
+                        is large enough for the app to scroll</li>
                     <li>If the user presses the back button, a prompt to exit appears warning that progress will be lost
                         when leaving in the middle of a game.</li>
                     <li>After each question is answered, the app will:
@@ -117,11 +118,14 @@
 
         <h2>Set Backs / Glitches</h2>
         <ul>
-            <li>Could not get shared_preferences to work properly in data_provider, so users and scores are not saved between sessions.
+            <li>Could not get shared_preferences to work properly in data_provider, so users and scores are not saved
+                between sessions.
             </li>
             <li>Some answer responses are too long and are aligned to the left side of the selection box. There seems to
                 be no way to always center text inside of toggleButtons</li>
-            
+            <li>There is significant lag during the first round of every game, no matter how many questions. Every round
+                after is rendered smoothly.</li>
+
         </ul>
     </div>
     <!-- #endregion -->

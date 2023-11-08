@@ -56,6 +56,7 @@ class _CreditsPageState extends State<CreditsPage> {
             ),
           ),
           centerTitle: true,
+          toolbarHeight: MediaQuery.of(context).size.width < 920 ? MediaQuery.of(context).size.width / 8 : kToolbarHeight,
         ),
         body: WebViewWidget(controller: controller),
       ),

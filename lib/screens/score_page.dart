@@ -25,6 +25,7 @@ class _ScorePageState extends State<ScorePage> {
       appBar: AppBar(
         title: const Text("Highscores"),
         centerTitle: true,
+        toolbarHeight: MediaQuery.of(context).size.width < 920 ? MediaQuery.of(context).size.width / 8 : kToolbarHeight,
       ),
       body: SafeArea(
         child: Center(
@@ -39,7 +40,7 @@ class _ScorePageState extends State<ScorePage> {
                     ),
                   ],
                 )
-          // is users list is not empty, display users and their scores
+          // if users list is not empty, display users and their scores
               : GridView.builder(
                   physics: const ScrollPhysics(),
                   itemCount: users.length,
