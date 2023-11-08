@@ -287,7 +287,7 @@ class _GamePageState extends State<GamePage> {
               elevation: 10,
               minimumSize: Size(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height / 10,
+                MediaQuery.of(context).size.height / 9,
               ),
             ),
             child: const Text("Submit"),
@@ -336,7 +336,7 @@ class _GamePageState extends State<GamePage> {
               elevation: 10,
               minimumSize: Size(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height / 10,
+                MediaQuery.of(context).size.height / 9,
               ),
             ),
             child: const Text("Next"),
