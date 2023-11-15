@@ -40,6 +40,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+
       // uses class to remove scrolling glow effect from entire application
       builder: (context, child) {
         return ScrollConfiguration(
