@@ -449,10 +449,8 @@ class _PromptPageState extends State<PromptPage> {
       var json = await search("https://opentdb.com/api_category.php");
 
       json["trivia_categories"].forEach((item) {
-        setState(() {
-          categoryList.add(item["name"]);
-          categoryIdList.add(item["id"].toString());
-        });
+        categoryList.add(item["name"]);
+        categoryIdList.add(item["id"].toString());
       });
 
       setState(() {
